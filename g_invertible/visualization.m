@@ -1,4 +1,4 @@
-%% Script to plot Figures 2 and 3 of paper 
+%% Script to plot Figures 2 and 3 of first submission of paper
 %% "Learning optimal controllers: A dynamical motion primitive approach"
 
 % Sampling grid 
