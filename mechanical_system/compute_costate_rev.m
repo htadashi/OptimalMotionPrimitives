@@ -3,9 +3,9 @@ function p = compute_costate_rev(x, u, M)
 %                      x'(t) = -f(x(t))-g(x(t))u(t)
 
    dVdq_dot = zeros(size(u));
-   for t = 1:size(u, 1) % samples
+   for t = 1:size(u, 2) % samples
         dVdq_dot(t,:) = 2*M(x(t,:))*u(t,:)';
    end
-   p = dVdq_dot';
+   p = dVdq_dot;
    %p = p';
 end
