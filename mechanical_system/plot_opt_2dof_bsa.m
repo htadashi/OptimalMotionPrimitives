@@ -38,7 +38,7 @@ T_final = 1;
 cost = @(u) vecnorm(u').^2;
 
 %[t_sol,u_sol,x_sol,dLambda_t_sol] = opt_2dof_bsa(N, T_final, x0, cost);
-load('OMF_sampling_double_pendulum8_data.mat', 'time_training', 'u_training', 'x_training', 'u_gt', 'x_gt'); 
+load('OMF_sampling_double_pendulum8_data.mat', 'time_training', 'u_training', 'x_training', 'time_gt', 'u_gt', 'x_gt'); 
 t_sol = time_training;
 u_sol = u_training;
 x_sol = x_training;
@@ -57,26 +57,27 @@ tau_sol = u_sol(1:2,:);
 %% Display link and motor speeds
 figure
 subplot(2,1,1);
-plot(t_sol,theta_dot_gt(1,:),'DisplayName','dq(1)')
+plot(time_gt,theta_dot_gt(1,:),'DisplayName','theta dot gt 1')
 hold on
-plot(t_sol,theta_dot_sol(1,:),'DisplayName','dtheta(1)')
+plot(t_sol,theta_dot_sol(1,:),'DisplayName','theta dot sol 1')
 %color_area_tol(t_sol, dLambda_t_sol(1,:), get(gca, 'YLim'), 1e-1, [0 0 1], 'dLambda_t1');
 %color_area_tol(t_sol, dLambda_t_sol(3,:), get(gca, 'YLim'), 1e-1, [1.0000 0.3765  0.1098], 'dLambda_t3');
 legend('Location','southwest')
 
 subplot(2,1,2); 
-plot(t_sol,theta_dot_gt(2,:),'DisplayName','dq(2)')
+plot(time_gt,theta_dot_gt(2,:),'DisplayName','theta dot gt 2')
 hold on
-plot(t_sol,theta_dot_sol(2,:),'DisplayName','dtheta(2)')
+plot(t_sol,theta_dot_sol(2,:),'DisplayName','theta dot sol 2')
 %color_area_tol(t_sol, dLambda_t_sol(2,:), get(gca, 'YLim'), 1e-1, [0 0 1], 'dLambda_t2');
 %color_area_tol(t_sol, dLambda_t_sol(4,:), get(gca, 'YLim'), 1e-1, [1.0000 0.3765  0.1098], 'dLambda_t4');
 legend('Location','southwest')
 
 %% Display EE speed and objective value
+%{
 vEE = {};
 obj = {};
 
-for i=1:size(dq_sol(1,:),2)
+for i=1:size(theta_dot_sol(1,:),1)
     v = get_vEE(x_sol(:,i));
     vEE{end+1} = v;
     obj{end+1} = cost(v);
@@ -98,7 +99,9 @@ plot(t_sol, vEE(3,:),'DisplayName','vEE(3)')
 legend
 
 % for i=1:size():
+
 %% Display link, motor and spring positions
+
 figure
 subplot(2,1,1);
 plot(t_sol,q_sol(1,:),'DisplayName','q(1)')
@@ -132,9 +135,9 @@ hold on
 plot(t_sol(1:end-1), dLambda_t_sol(4,:),'DisplayName','dLambda_t4')
 legend
 hold off
-
+%}
 %% Visualize the solution
-plot_pendulum(q_sol, filename);
+plot_pendulum(u_sol', filename);
 % figure
 
 % plot(t_sol,dpsi_sol(1) - dq_sol(1))
