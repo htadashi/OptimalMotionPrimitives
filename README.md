@@ -7,3 +7,4 @@
 
 ## Attribution 
 - DMP implementation from `https://github.com/epfl-lasa/SAHR_bifurcation/tree/master/MATLAB/evaluation/DMP/koda`
+- Pendulum animation from `https://gitlab.lrz.de/darko_project/bsa-yunt/-/blob/main/helper_functions/plot_pendulum.m`
