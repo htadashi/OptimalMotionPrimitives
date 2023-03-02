@@ -1,16 +1,6 @@
-function plot_pendulum(q_sol, filename)
+function plot_pendulum(scenario, q_sol, filename)
 
-[m_1, l_1, m_2, l_2, J_l] = get_params_plot_pendulum();
-
-m1 = m_1; % mass of link 1 in kg
-l1 = l_1; % length of link 1 in m
-lc1 = l1/2; % distance to com of link 1 in m
-
-% Link 2
-m2 = m_2;
-l2 = l_2;
-lc2 = l2/2;
-
+[m1, l1, m2, l2, Iz1, Iz2, r1, r2] = get_params_pendulum(scenario);
 
 % MDH Paramters of the robot arm (theta is the free parameter for a revolute joint)
 % Link 1 
@@ -26,27 +16,24 @@ alpha2  = 0;
 % Additional parameters
 g = 9.81; % acceleration due to gravity in m/s^2
 
-% Inertial matrices around COM(!)
-I1 = J_l;
-I2 = J_l;
+% Inertial matrices around center of mass
+I1 = Iz1;
+I2 = Iz2;
 
+% Inertial matrices around link
+I1 =  I1 + m1*r1^2;
+I2 =  I2 + m2*r2^2;
 
-% Inertial matrices around Link(!)
-I1 =  I1 + m1*lc1^2;
-I2 =  I2 + m2*lc2^2;
-
-
-% Define robote
+% Define robot
 robot = rigidBodyTree;
 robot.Gravity = [0 -g 0];
 robot.DataFormat = "row";
-
 
 % Body 1
 body1 = rigidBody('body1');
 body1.Mass = m1;
 body1.Inertia = [0 0 I1 0 0 0];
-body1.CenterOfMass = [lc1 0 0];
+body1.CenterOfMass = [r1 0 0];
 
 jnt1 = rigidBodyJoint('jnt1','revolute');
 jnt1.HomePosition = 0;
@@ -61,7 +48,7 @@ addBody(robot,body1,'base')
 body2 = rigidBody('body2');
 body2.Mass = m2;
 body2.Inertia = [0 0 I2 0 0 0];
-body2.CenterOfMass = [lc2 0 0];
+body2.CenterOfMass = [r2 0 0];
 
 jnt2 = rigidBodyJoint('jnt2','revolute');
 jnt2.HomePosition = 0; % User defined
