@@ -87,7 +87,7 @@ h =  findobj('type','figure');
 n = length(h);
 
 hold on
-%%
+
 framesPerSecond = 50;
 r = rateControl(framesPerSecond);
 for i = 1:size(q_sol(1,:),2)
@@ -95,9 +95,11 @@ for i = 1:size(q_sol(1,:),2)
     drawnow
     
     % save as a gif
-    frame = getframe(n);
+   
+    frame = getframe(n);   
     im = frame2im(frame);
-    [imind,cm] = rgb2ind(im,128);
+
+    [imind,cm] = rgb2ind(im,256);
     if i == 1
         imwrite(imind,cm,filename,'gif', 'Loopcount',inf,'DelayTime',0);
     else
@@ -107,4 +109,6 @@ for i = 1:size(q_sol(1,:),2)
     figure(n)
     waitfor(r);
     figure(n)
+ 
+
 end

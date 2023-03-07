@@ -75,12 +75,12 @@ function [x_initial, x_direction, x_final, N_samples, x_step, max_step, threshol
             threshold = 8;
         case 10
             x_initial = [0; 0; 0; 0];
-            x_direction = [1; 1; 1; 1];
-            x_final = [0.1; 0.1; 0; 0];  
-            N_samples = 15;
-            x_step = 0.03; % Spatial increment
-            max_step = 5; % Number of steps before forcing taking another sample
-            threshold = 5;
+            x_direction = [0.1; 0.1; 0.1; 0.1];
+            x_final = [0.2; 0.2; 0; 0];  
+            N_samples = 20;
+            x_step = 0.1; % Spatial increment
+            max_step = 8; % Number of steps before forcing taking another sample
+            threshold = 8;
         otherwise
             warning("Invalid experiment number")
     end
