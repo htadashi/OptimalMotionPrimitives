@@ -11,8 +11,8 @@ theta_2 = linspace(0,2*pi,100)'; % θ₂
 anim_inc = 1;
 
 %% Second link constant, first moving 
-q= [theta_2(1:anim_inc:end)';  % θ₁
-    theta_1(1:anim_inc:end)']; % θ₂
+q= [theta_1(1:anim_inc:end)';  % θ₁
+    theta_2(1:anim_inc:end)']; % θ₂
 
 %% First link constant, second moving 
 %q=[theta_1(1:anim_inc:end)';  % θ₁

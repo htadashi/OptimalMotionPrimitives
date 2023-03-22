@@ -33,13 +33,19 @@ function [t,u,x] = solve_OCP_direct_method(F, n_states, n_inputs, N, time_range,
     opti.subject_to(X(:, 1)==x0);
     opti.subject_to(X(:, end)==x1);     
 
-    % ---- constraints conditions --------
+    % ---- constraints conditions for the double pendulum --------
     if n_states>=2 
         opti.subject_to(0<=X(1, :));
-        opti.subject_to(X(1, :)<=pi/2);           
-        opti.subject_to(0<=X(2, :));
-        opti.subject_to(X(2, :)<=pi/2);
+        opti.subject_to(X(1, :)<=pi);           
+        opti.subject_to(-pi<=X(2, :));
+        opti.subject_to(X(2, :)<=pi);
+        opti.subject_to(2*X(1,:)+X(2, :)<=2*pi);
     end
+    %for i=1:size(X,2)
+    %    if (X(1,i)>pi/2)
+    %        
+    %    end
+    %end
     %% Initial values
     opti.set_initial(X, zeros(n_states,N+1));
     opti.set_initial(U, ones(n_inputs,N));
