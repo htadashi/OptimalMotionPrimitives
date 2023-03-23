@@ -42,7 +42,7 @@ function [n_interval, t_final, scenario] = load_OCP_config(experiment_number)
             t_final = 3;
             scenario = 2;
         case 11
-            n_interval = 200; % number of control intervals
+            n_interval = 120; % number of control intervals
             t_final = 10;
             scenario = 1;
         otherwise
