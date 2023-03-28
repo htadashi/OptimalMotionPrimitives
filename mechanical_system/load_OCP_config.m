@@ -3,7 +3,7 @@ function [n_interval, t_final, scenario] = load_OCP_config(experiment_number)
     switch experiment_number
         case 1
             n_interval = 100; % number of control intervals
-            t_final = 5;
+            t_final = 3;
             scenario = 1;
         case 2
             n_interval = 100; % number of control intervals
@@ -42,8 +42,8 @@ function [n_interval, t_final, scenario] = load_OCP_config(experiment_number)
             t_final = 3;
             scenario = 2;
         case 11
-            n_interval = 120; % number of control intervals
-            t_final = 10;
+            n_interval = 300; % number of control intervals
+            t_final = 3;
             scenario = 1;
         otherwise
             warning("Invalid experiment number")

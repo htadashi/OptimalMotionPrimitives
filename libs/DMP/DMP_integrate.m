@@ -28,5 +28,5 @@ for i = 1:size(DMP.w,2)
   S.y(i) = S.y(i) + dy*dt;
 end
 
-dx_dt = -DMP.a_x * S.x / DMP.tau;
+dx_dt = -DMP.a_x * S.x / DMP.tau;   
 S.x = S.x + dx_dt*dt;

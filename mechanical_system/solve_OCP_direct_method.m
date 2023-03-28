@@ -42,11 +42,7 @@ function [t,u,x] = solve_OCP_direct_method(F, n_states, n_inputs, N, time_range,
         opti.subject_to(2*X(1,:)+X(2, :)<=2*pi);
         opti.subject_to(2*X(1,:)+X(2, :)>=0);
     end
-    %for i=1:size(X,2)
-    %    if (X(1,i)>pi/2)
-    %        
-    %    end
-    %end
+
     %% Initial values
     opti.set_initial(X, zeros(n_states,N+1));
     opti.set_initial(U, ones(n_inputs,N));

@@ -1,4 +1,4 @@
-function plot_pendulum(scenario, q_sol, filename)
+function plot_pendulum(scenario, q_sol, filename, with_obstacles)
 
 [m1, l1, m2, l2, Iz1, Iz2, r1, r2] = get_params_pendulum(scenario);
 
@@ -79,12 +79,26 @@ addBody(robot,bodyEE,'body2');
 % hold on
 % plot(points(:,1),points(:,2),'k')
 % axis([-0.1 0.7 -0.3 0.5])
+
 figure;
 show(robot);
 view(0,90)
 
 h =  findobj('type','figure');
 n = length(h);
+
+
+%% Add a circular obstacle
+if with_obstacles == 1
+    hold on;
+    %draw_circle(0.6,1.3,0.2);
+    %hold on;
+    yline(1);
+    %draw_circle(-1.5,-1,0.3);   
+    hold on;
+end
+
+
 
 hold on
 
@@ -94,6 +108,7 @@ for i = 1:size(q_sol(1,:),2)
     show(robot,q_sol(:,i)','PreservePlot',false);
     drawnow
     
+
     % save as a gif
    
     frame = getframe(n);   
@@ -112,3 +127,8 @@ for i = 1:size(q_sol(1,:),2)
  
 
 end
+
+
+
+
+
