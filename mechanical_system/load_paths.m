@@ -1,4 +1,4 @@
-function [casadi_path, omf_path, dmp_path] = load_paths()
+function [casadi_path, omf_path, dmp_path, dmp_path_obstacles] = load_paths()
 
     %casadi_path = "C:\Users\tadas\Dropbox\MATLAB\casadi_win"
     %casadi_path = "C:\Users\ge89liz\Dropbox\MATLAB\casadi_win"
@@ -6,5 +6,6 @@ function [casadi_path, omf_path, dmp_path] = load_paths()
 
     omf_path = "..\libs\OMF";
     dmp_path = "..\libs\DMP";
+    dmp_path_obstacles = "..\libs\DMP_with_obstacles";
 
 end

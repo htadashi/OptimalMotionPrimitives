@@ -88,12 +88,12 @@ h =  findobj('type','figure');
 n = length(h);
 
 
-%% Add a circular obstacle
+%% Add an obstacle
 if with_obstacles == 1
     hold on;
     %draw_circle(0.6,1.3,0.2);
     %hold on;
-    yline(1);
+    plot(0,1.9,'r*')
     %draw_circle(-1.5,-1,0.3);   
     hold on;
 end

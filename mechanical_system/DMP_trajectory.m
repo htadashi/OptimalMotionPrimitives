@@ -1,4 +1,4 @@
-function [TRJ, TT] = DMP_trajectory(DMP, dt, t_end, obs)
+function [TRJ, TT] = DMP_trajectory(DMP, dt, t_end, obs, l_1, l_2)
 % DMP_TRAJECTORY Reconstruct DMP after changing its goal
     % initialize the DMP state
     S.x = 1; 
@@ -15,14 +15,20 @@ function [TRJ, TT] = DMP_trajectory(DMP, dt, t_end, obs)
         for i = 1:F
             if DMP.type == 1
                 S = DMP_integrate(DMP, S, dt);
-            elseif DMP_type == 2
+            elseif DMP.type == 2
                 S = OMF_integrate(DMP, S, dt);
+            elseif DMP.type == 3 && obs ==1
+                obs_pos = obstacle_position();
+                S = DMP_integrate_with_obstacles(DMP, S, dt, obs_pos, l_1, l_2);
             end
             t = t + dt;
         end
         TT = [TT; t];
         TRJ = [TRJ; S.y];
     end
+
+%% Another idea about obstacle avoidance 
+%{
     if obs == 1
         for i = 1:size(TRJ, 1)
             if TRJ(i,1)<0
@@ -35,11 +41,12 @@ function [TRJ, TT] = DMP_trajectory(DMP, dt, t_end, obs)
             elseif TRJ(i,2)<-pi
                 TRJ(i,2) = -pi;
             end
-            if 2*TRJ(i,1)+TRJ(i, 2)>2*pi
-                TRJ(:, 2) = 2*pi -2*TRJ(i,1);
+            if 2*TRJ(i,1)+TRJ(i,2)>2*pi
+                TRJ(:,2) = 2*pi -2*TRJ(i,1);
             elseif 2*TRJ(i,1)+TRJ(i, 2)<0
                 TRJ(i,2) = TRJ(i,1);
             end
         end
     end
+%}
 end
