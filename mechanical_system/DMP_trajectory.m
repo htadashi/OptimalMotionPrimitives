@@ -28,7 +28,6 @@ function [TRJ, TT] = DMP_trajectory(DMP, dt, t_end, obs, l_1, l_2)
     end
 
 %% Another idea about obstacle avoidance 
-%{
     if obs == 1
         for i = 1:size(TRJ, 1)
             if TRJ(i,1)<0
@@ -48,5 +47,4 @@ function [TRJ, TT] = DMP_trajectory(DMP, dt, t_end, obs, l_1, l_2)
             end
         end
     end
-%}
 end

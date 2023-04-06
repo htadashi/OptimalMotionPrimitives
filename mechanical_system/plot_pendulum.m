@@ -93,7 +93,7 @@ if with_obstacles == 1
     hold on;
     %draw_circle(0.6,1.3,0.2);
     %hold on;
-    plot(0,1.9,'r*')
+    plot(0,1.7,'r*')
     %draw_circle(-1.5,-1,0.3);   
     hold on;
 end

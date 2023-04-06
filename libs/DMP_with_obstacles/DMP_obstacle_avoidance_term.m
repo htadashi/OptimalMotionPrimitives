@@ -10,7 +10,7 @@ function p = DMP_obstacle_avoidance_term(DMP, S, obs_pos, l_1, l_2)
     end
 
     if ~isfield(DMP, 'gama_obs')
-        DMP.gama_obs = 1000;
+        DMP.gama_obs = 10000;
     end
 
     % Preallocation
