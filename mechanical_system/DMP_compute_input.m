@@ -1,7 +1,7 @@
 function u_DMP = DMP_compute_input(x_DMP, time, u_fcn_x_dx)
 % DMP_COMPUTE_INPUT  Compute input associated to the DMP trajectory.
 %                    Assumes that u can be expressed as a function 
-%                    of x and x', i.e. u = u_fcn_x_dx(x, dx)
+%                    of x and x', i.e. u = u_fcn_x_dx(x, dx) 
     n_states = size(x_DMP, 2);
     n_samples = length(time);
 
