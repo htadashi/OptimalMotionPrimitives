@@ -6,7 +6,7 @@ function [x_initial, x_direction, x_final, N_samples, x_step, max_step, threshol
             x_direction = [0.1; 0; 0.1; 0.1];
             x_final = [pi/2; 0; 0; 0];  
             N_samples = 8;
-            x_step = 0.01; % Spatial increment
+            x_step = 0.05; % Spatial increment
             max_step = 5; % Number of steps before forcing taking another sample
             threshold = 5;
         case 2

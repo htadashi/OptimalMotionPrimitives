@@ -43,6 +43,12 @@ function [t,u,x] = solve_OCP_direct_method(F, n_states, n_inputs, N, time_range,
         opti.subject_to(2*X(1,:)+X(2, :)>=0);
     end
 
+    % limit the torques
+    %opti.subject_to(U(1,:)<=25);
+    %opti.subject_to(U(2,:)<=25);
+    %opti.subject_to(U(1,:)>=-25);
+    %opti.subject_to(U(2,:)>=-25);
+
     %% Initial values
     opti.set_initial(X, zeros(n_states,N+1));
     opti.set_initial(U, ones(n_inputs,N));
