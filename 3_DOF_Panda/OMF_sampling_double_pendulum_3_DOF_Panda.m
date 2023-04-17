@@ -5,7 +5,7 @@ clc;
 % The first part (the definition of the parameters)
 % is the same as in the mechanical system folder
 
-experiment_number = 9;
+experiment_number = 11;
 
 [casadi_path, omf_path, dmp_path, dmp_path_obstacles] = load_paths();
 
@@ -50,6 +50,14 @@ q_initial = [x_initial(1:2); zeros_initial];
 
 dq_initial = [x_initial(3:4); zeros_initial];
 
+% With the next variable, we define which joints are fixed, and which can
+% move. The numbers of the not fixed joints are added to the free_joints 
+% variable. For example, if joints 3,4,5,7 should be fixed and 1,2,6 not
+% fixed, the variable would be free_joints=[1 2 6]
+
+free_joints   =   [1 2];
+
+
 % Define control-affine system of the form
 % x' = f(x) + g(x)u  (1)
 %
@@ -69,12 +77,12 @@ dq_initial = [x_initial(3:4); zeros_initial];
 
 % This is copied from 
 % https://github.com/marcocognetti/FrankaEmikaPandaDynModel/blob/master/matlab/dyn_model_panda/main.m
-Q = zeros(num_of_joints,length(t));
-dQ = zeros(num_of_joints,length(t));
-ddQ = zeros(num_of_joints,length(t));
-TAU = zeros(num_of_joints,length(t));
+Q = zeros(n_states,length(t));
+dQ = zeros(n_states,length(t));
+ddQ = zeros(n_states,length(t));
+TAU = zeros(n_inputs,length(t));
 
-for j=1:num_of_joints
+for j=1:n_states/2
     Q(j,:) = sin(t);
     dQdt(j,:) = cos(t);
     ddQdt(j,:) = -sin(t);
@@ -85,16 +93,24 @@ for i=1:length(t)
     dq = dQdt(:,i);
     ddq = ddQdt(:,i);
     
-    g = get_GravityVector_3dof(q, q_initial);
-    c = get_CoriolisVector_3dof(q, q_initial, dq, dq_initial);
-    M = get_MassMatrix_3dof(q, q_initial);
+    H = get_GravityVector(q, q_initial, free_joints);
+
+    %c = get_CoriolisVector(q, q_initial, dq, dq_initial, free_joints);
+
+    M = get_MassMatrix(q, q_initial, free_joints);
     %tauf = get_FrictionTorque(dq);
+    C = get_CoriolisMatrix(q, q_initial, dq, dq_initial, free_joints);
+    TAU(:,i) = M*ddq + C*dq + H ; %+ tauf;
     
-    TAU(:,i) = M*ddq + c + g; %+ tauf;
+    %TAU(:,i) = M*ddq + c + g; %+ tauf;
+    plot(t,TAU);
 end
     
+M = @(x) [alpha+2*beta*cos(x(2)), delta+beta*cos(x(2)); delta+beta*cos(x(2)), delta];
 
+C = @(x) [-beta*sin(x(2))*x(4)+b1, -beta*sin(x(2))*(x(3)+x(4)); beta*sin(x(2))*x(3), b2];
 
+H = @(x) [m1*grav*r1*cos(x(1)) + m2*grav*(l1*cos(x(1)) + r2*cos(x(1)+x(2))); m2*grav*r2*cos(x(1)+x(2))];
 
 f = @(x) [x(3); ...
           x(4); ...
@@ -300,7 +316,7 @@ while n <= N_samples
     end
 
     % Plot all the gifs 
-    gif_filename = ['gifs_with_obstacles_with_torque_limits/gifs_9/opt_2dof_pendulum' num2str(n) '.gif'];
+    gif_filename = ['gifs/gifs_11/opt_2dof_pendulum' num2str(n) '.gif'];
     delete(gif_filename);
     % u_DMP
     % decrease size of trajectory by 10 in order to run faster
