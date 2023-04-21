@@ -46,9 +46,10 @@ n_inputs = 2;
 % Set zero initial conditions for the 3-7 DOF
 zeros_initial = zeros(num_of_joints - n_states/2, 1);
 
-q_initial = [x_initial(1:2); zeros_initial];
+% The states are defined as q = [theta_1; theta_2; ... ; theta_1_dot, theta_2_dot]
+q_initial = [x_initial(1:2); zeros_initial; x_initial(3:4); zeros_initial];
 
-dq_initial = [x_initial(3:4); zeros_initial];
+
 
 % With the next variable, we define which joints are fixed, and which can
 % move. The numbers of the not fixed joints are added to the free_joints 
@@ -77,40 +78,36 @@ free_joints   =   [1 2];
 
 % This is copied from 
 % https://github.com/marcocognetti/FrankaEmikaPandaDynModel/blob/master/matlab/dyn_model_panda/main.m
-Q = zeros(n_states,length(t));
-dQ = zeros(n_states,length(t));
-ddQ = zeros(n_states,length(t));
-TAU = zeros(n_inputs,length(t));
+%Q = zeros(n_states,length(t));
+%dQ = zeros(n_states,length(t));
+%ddQ = zeros(n_states,length(t));
+%TAU = zeros(n_inputs,length(t));
 
-for j=1:n_states/2
-    Q(j,:) = sin(t);
-    dQdt(j,:) = cos(t);
-    ddQdt(j,:) = -sin(t);
-end
+%for j=1:n_states/2
+%    Q(j,:) = sin(t);
+%    dQdt(j,:) = cos(t);
+%    ddQdt(j,:) = -sin(t);
+%end
 
-for i=1:length(t)
-    q = Q(:,i);
-    dq = dQdt(:,i);
-    ddq = ddQdt(:,i);
-    
-    H = get_GravityVector(q, q_initial, free_joints);
+%for i=1:length(t)
+%   q = Q(:,i);
+%    dq = dQdt(:,i);
+%    ddq = ddQdt(:,i);
+ 
+% Define the matrices
+H = @(q) get_GravityVector(q, q_initial, free_joints);
+M = @(q) get_MassMatrix(q, q_initial, free_joints);
+C = @(q) get_CoriolisMatrix(q, q_initial, free_joints);
+TAU = @(q,dq,ddq) M(q)*ddq + C(q)*dq + H(q);  
 
-    %c = get_CoriolisVector(q, q_initial, dq, dq_initial, free_joints);
 
-    M = get_MassMatrix(q, q_initial, free_joints);
-    %tauf = get_FrictionTorque(dq);
-    C = get_CoriolisMatrix(q, q_initial, dq, dq_initial, free_joints);
-    TAU(:,i) = M*ddq + C*dq + H ; %+ tauf;
-    
-    %TAU(:,i) = M*ddq + c + g; %+ tauf;
-    plot(t,TAU);
-end
-    
-M = @(x) [alpha+2*beta*cos(x(2)), delta+beta*cos(x(2)); delta+beta*cos(x(2)), delta];
+disp("Matrices computed!")
 
-C = @(x) [-beta*sin(x(2))*x(4)+b1, -beta*sin(x(2))*(x(3)+x(4)); beta*sin(x(2))*x(3), b2];
+%M = @(x) [alpha+2*beta*cos(x(2)), delta+beta*cos(x(2)); delta+beta*cos(x(2)), delta];
 
-H = @(x) [m1*grav*r1*cos(x(1)) + m2*grav*(l1*cos(x(1)) + r2*cos(x(1)+x(2))); m2*grav*r2*cos(x(1)+x(2))];
+%C = @(x) [-beta*sin(x(2))*x(4)+b1, -beta*sin(x(2))*(x(3)+x(4)); beta*sin(x(2))*x(3), b2];
+
+%H = @(x) [m1*grav*r1*cos(x(1)) + m2*grav*(l1*cos(x(1)) + r2*cos(x(1)+x(2))); m2*grav*r2*cos(x(1)+x(2))];
 
 f = @(x) [x(3); ...
           x(4); ...
@@ -127,9 +124,10 @@ I = @(u) vecnorm(u').^2;
 
 % Control input as a function of the state and its derivative
 u_fcn_x_dx = @(x, dx) mldivide(g(x), (dx - f(x)));
-
-
-
+example = [1;1;10;20;90;0;40;1;1;3;4;5;2;10]
+tic
+C(example)
+toc
 % Choose DMP type:
 % 1: Vanilla DMP proposed by Ijspeert et al. 2002
 % 2: DMP using the time-varying stiffness modification proposed by Weitschat et al.
@@ -158,7 +156,7 @@ DMP_costs = [];
 
 % Start sampling algorithm
 while n <= N_samples    
-
+    disp('While starts')
     x_values = [x_values x_final];
 
     % Sample backward solution from numerical solver 
@@ -172,7 +170,7 @@ while n <= N_samples
                 [0 t_final], ...  % Time horizon
                 x_final, ...      % Initial state
                 x_initial);       % Terminal state
-
+    disp('after first solve')
     % Kinetic and potential energy of the training solution
     for i = 1:size(x_training, 2)
         E_kin_training(i) = 0.5*[x_training(3, i) x_training(4, i)]*...

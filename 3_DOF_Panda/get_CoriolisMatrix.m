@@ -13,7 +13,7 @@
 % get_CoriolisMatrix returns the numerical Coriolis and centrifugal forces 
 % matrix S(q,qdot), given the current joint positions and velocities
 
-function S_hat = get_CoriolisMatrix(q,q0,dq,dq0, free_joints)
+function S_hat = get_CoriolisMatrix(q,q0, free_joints)
 %GET_CORIOLISMATRIX
 %    S_HAT = GET_CORIOLISMATRIX(Q,DQ)
 
@@ -24,9 +24,8 @@ function S_hat = get_CoriolisMatrix(q,q0,dq,dq0, free_joints)
 % joints 1 and 2 
 q1 = q(1);
 q2 = q(2);
-dq1 = dq(1);
-dq2 = dq(2);
-
+dq1 = q(3);
+dq2 = q(4);
 
 % the other joints are fixed, so they are equal to the initial condition
 q3 = q0(3);
@@ -34,11 +33,11 @@ q4 = q0(4);
 q5 = q0(5);
 q6 = q0(6);
 q7 = q0(7);
-dq3 = dq0(3);
-dq4 = dq0(4);
-dq5 = dq0(5);
-dq6 = dq0(6);
-dq7 = dq0(7);
+dq3 = q0(10);
+dq4 = q0(11);
+dq5 = q0(12);
+dq6 = q0(13);
+dq7 = q0(14);
 
 
 

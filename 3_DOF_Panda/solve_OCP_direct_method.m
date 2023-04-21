@@ -21,12 +21,15 @@ function [t,u,x] = solve_OCP_direct_method(F, n_states, n_inputs, N, time_range,
     dt = T/N; % length of a control interval
     for k=1:N % loop over control intervals
         % Runge-Kutta 4 integration
+        tic
         k1 = F(X(:,k),         U(:,k));
         k2 = F(X(:,k)+dt/2*k1, U(:,k));
         k3 = F(X(:,k)+dt/2*k2, U(:,k));
         k4 = F(X(:,k)+dt*k3,   U(:,k));
         x_next = X(:,k) + dt/6*(k1+2*k2+2*k3+k4); 
         opti.subject_to(X(:,k+1)==x_next); % close the gaps
+        toc
+        disp(k);
     end
     
     % ---- boundary conditions --------

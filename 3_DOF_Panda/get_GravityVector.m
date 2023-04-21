@@ -23,10 +23,11 @@ function g_li_hat = get_GravityVector(q, q0, free_joints)
 % joints 1,2 and 4
 q1 = q(1);
 q2 = q(2);
-q4 = q(3);
+
 
 % the other joints are fixed, so they are equal to the initial condition
-q3 = q0(4);
+q3 = q0(3);
+q4 = q0(4);
 q5 = q0(5);
 q6 = q0(6);
 q7 = q0(7);
