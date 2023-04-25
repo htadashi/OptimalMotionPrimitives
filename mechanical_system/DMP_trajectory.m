@@ -17,7 +17,7 @@ function [TRJ, TT] = DMP_trajectory(DMP, dt, t_end, obs, l_1, l_2)
                 S = DMP_integrate(DMP, S, dt);
             elseif DMP.type == 2
                 S = OMF_integrate(DMP, S, dt);
-            elseif DMP.type == 3 && obs ==1
+            elseif DMP.type == 3 && obs == 1
                 obs_pos = obstacle_position();
                 S = DMP_integrate_with_obstacles(DMP, S, dt, obs_pos, l_1, l_2);
             end
@@ -35,15 +35,15 @@ function [TRJ, TT] = DMP_trajectory(DMP, dt, t_end, obs, l_1, l_2)
             elseif TRJ(i,1)>pi
                 TRJ(i,1)=pi;
             end
+            if 2*TRJ(i,1)+TRJ(i,2)>2*pi
+                TRJ(i,2) = 2*pi - 2*TRJ(i,1);
+            elseif 2*TRJ(i,1)+TRJ(i,2)<0
+                TRJ(i,2) = -2*TRJ(i,1);
+            end
             if TRJ(i,2)>pi
                 TRJ(i,2) = pi;
             elseif TRJ(i,2)<-pi
                 TRJ(i,2) = -pi;
-            end
-            if 2*TRJ(i,1)+TRJ(i,2)>2*pi
-                TRJ(:,2) = 2*pi -2*TRJ(i,1);
-            elseif 2*TRJ(i,1)+TRJ(i, 2)<0
-                TRJ(i,2) = TRJ(i,1);
             end
         end
     end
